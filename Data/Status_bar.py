@@ -11,7 +11,7 @@ class Status_bar:
 
 
 status_bar = [
-    '**Level {hero.level}*****************************',
+    '**Level {hero.hero_level}*****************************',
     '*HP={hero.heal_points} EX={hero.experience} AT={hero.attack} DF={hero.defend} MN={hero.money} OV={hero.overhand}',
     '**************************************'
 ]

@@ -1,4 +1,5 @@
-from Data.Objects import *
+from Data.Objects import objects
+import random
 
 class Unit:
     def __init__(self, fields):
@@ -7,6 +8,7 @@ class Unit:
         self.fields = fields
         self.level = 0
         self.field = self.fields[self.level]
+        self.future_image = None
         self.image = '@'
         self.find_hero()
         self.money = 0
@@ -19,9 +21,6 @@ class Unit:
         self.work_field()
 
     def work_field(self):
-        """
-
-        """
         self.field = [list(line) for line in self.field]
 
     def next_level(self):
@@ -38,18 +37,27 @@ class Unit:
 
         if key == 'w':
             if self.y != 0:
-                if self.inspection():
+                self.future_image = self.field[self.y - 1][self.x]
+                if self.inspection['passable']:
                     self.y -= 1
+                    self.inspection['get'](self, self.inspection)
         elif key == 's':
-            if self.y != len(self.field)-1:
-
+            if len(self.field)-1 != self.y:
+                self.future_image = self.field[self.y + 1][self.x]
+                print(self.inspection)
+                if self.inspection['passable']:
                     self.y += 1
+                    self.inspection['get'](self, self.inspection)
         elif key == 'a':
-
+            self.future_image = self.field[self.y][self.x - 1]
+            if self.inspection['passable']:
                 self.x -= 1
+                self.inspection['get'](self, self.inspection)
         elif key == 'd':
-
+            self.future_image = self.field[self.y][self.x + 1]
+            if self.inspection['passable']:
                 self.x += 1
+                self.inspection['get'](self, self.inspection)
 
     def find_hero(self):
         """
@@ -71,13 +79,29 @@ class Unit:
             self.y = j
 
     def update(self):
-        self.inspection()
         self.field[self.y][self.x] = self.image
 
+    @property
     def inspection(self):
-        """
-        Проверка на ключевые символы
-        """
         for item in objects:
-            if item['image'] == self.field[self.y][self.x]:
-                return item['passable']
+            if item['image'] == self.future_image:
+                return item
+
+    @property
+    def free_place(self):
+        path_list = []
+        if self.field[self.y+1][self.x] == '.':
+            path_list.append((self.y+1, self.x))
+        elif self.field[self.y][self.x-1] == '.':
+            path_list.append((self.y, self.x-1))
+        elif self.field[self.y][self.x+1] == '.':
+            path_list.append((self.y, self.x+1))
+        elif self.field[self.y-1][self.x] == '.':
+            path_list.append((self.y-1, self.x))
+        return path_list[random.randint(0, len(path_list) - 1)]
+
+    def empty_overhand(self):
+        if self.overhand:
+            for item in objects:
+                if item['name'] == self.overhand:
+                    self.field[self.free_place[0]][self.free_place[1]] = item['image']

@@ -3,16 +3,16 @@ import termios
 import sys
 import os
 from Data.template_colors import *
-from Data.Objects import object
 from Data.fields import *
 from Data.Status_bar import *
 from Classes.Hero import *
-from Classes.Monster import Monster
+from Classes.Monster import *
+
 
 class Game:
     def __init__(self):
         self.hero = Unit(fields)
-        self.monster = Monster()
+        self.snake = Snake()
         self.status_bar = Status_bar(status_bar, self.hero)
 
     def cls(self):
@@ -64,6 +64,8 @@ class Game:
             self.render_field()
             print('You pressed', ch)
             print('LEVEL -', self.hero.level+1)
+            print(self.hero.x, self.hero.y)
+            print(self.hero.future_image)
 
 
 if __name__ == "__main__":
