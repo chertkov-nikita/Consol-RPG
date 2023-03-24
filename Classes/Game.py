@@ -6,21 +6,18 @@ from Data.template_colors import *
 from Data.fields import *
 from Data.Status_bar import *
 from Classes.Hero import *
-from Classes.Monster import *
 
 
 class Game:
     def __init__(self):
         self.hero = Unit(fields)
-        self.snake = Snake()
         self.status_bar = Status_bar(status_bar, self.hero)
 
     def cls(self):
         """
-        Очищаем консоль
+        Clear console
         """
         os.system(['clear', 'cls'][os.name == 'nt'])
-
 
     def getchar(self):
         """
@@ -63,7 +60,7 @@ class Game:
             print('\n')
             self.render_field()
             print('You pressed', ch)
-            print('LEVEL -', self.hero.level+1)
+            print('LEVEL -', self.hero.level + 1)
             print(self.hero.x, self.hero.y)
             print(self.hero.future_image)
 

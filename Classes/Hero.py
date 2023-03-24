@@ -1,5 +1,7 @@
 from Data.Objects import objects
+from Data.Monster import monsters
 import random
+
 
 class Unit:
     def __init__(self, fields):
@@ -42,7 +44,7 @@ class Unit:
                     self.y -= 1
                     self.inspection['get'](self, self.inspection)
         elif key == 's':
-            if len(self.field)-1 != self.y:
+            if len(self.field) - 1 != self.y:
                 self.future_image = self.field[self.y + 1][self.x]
                 print(self.inspection)
                 if self.inspection['passable']:
@@ -61,7 +63,7 @@ class Unit:
 
     def find_hero(self):
         """
-        Ищет персонажа
+        Find unit
         """
         j = 0
         i = -1
@@ -86,18 +88,21 @@ class Unit:
         for item in objects:
             if item['image'] == self.future_image:
                 return item
+        for monster in monsters:
+            if monster['image'] == self.future_image:
+                return monster
 
     @property
     def free_place(self):
         path_list = []
-        if self.field[self.y+1][self.x] == '.':
-            path_list.append((self.y+1, self.x))
-        elif self.field[self.y][self.x-1] == '.':
-            path_list.append((self.y, self.x-1))
-        elif self.field[self.y][self.x+1] == '.':
-            path_list.append((self.y, self.x+1))
-        elif self.field[self.y-1][self.x] == '.':
-            path_list.append((self.y-1, self.x))
+        if self.field[self.y + 1][self.x] == '.':
+            path_list.append((self.y + 1, self.x))
+        elif self.field[self.y][self.x - 1] == '.':
+            path_list.append((self.y, self.x - 1))
+        elif self.field[self.y][self.x + 1] == '.':
+            path_list.append((self.y, self.x + 1))
+        elif self.field[self.y - 1][self.x] == '.':
+            path_list.append((self.y - 1, self.x))
         return path_list[random.randint(0, len(path_list) - 1)]
 
     def empty_overhand(self):
